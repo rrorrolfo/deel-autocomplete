@@ -1,4 +1,6 @@
-export const fetchProductsByName = (name: string) =>
+import { ProductType } from "../../common/types/products";
+
+export const fetchProductsByName = (name: string): Promise<ProductType[]> =>
   fetch(`https://api.escuelajs.co/api/v1/products/?title=${name}`)
     .then((res) => {
       if (!res.ok) {
