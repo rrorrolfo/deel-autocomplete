@@ -1,8 +1,8 @@
-import { ProductType } from "../../../common/types/products";
+import { ProductWithHiglightTitle } from "../../../common/types/products";
 import styles from "./suggestionsTable.module.css";
 
 type SuggestionsTableProps = {
-  suggestions: ProductType[];
+  suggestions: ProductWithHiglightTitle[];
 };
 
 const SuggestionsTable = ({ suggestions }: SuggestionsTableProps) => {
@@ -10,7 +10,9 @@ const SuggestionsTable = ({ suggestions }: SuggestionsTableProps) => {
     <div className={styles.resultsTable}>
       <ul className={styles.suggestionsList}>
         {suggestions.length ? (
-          suggestions.map(({ title, id }) => <li key={id}>{title}</li>)
+          suggestions.map(({ highlightTitle, id }) => (
+            <li key={id}>{highlightTitle}</li>
+          ))
         ) : (
           <li>No suggestions match your search</li>
         )}
