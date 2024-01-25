@@ -13,6 +13,8 @@ const Autocomplete = () => {
   const [suggestions, setSuggestions] = useState<ProductWithHiglightTitle[]>(
     []
   );
+  const [showSuggestions, toggleShowSuggestions] = useState(false);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -48,8 +50,10 @@ const Autocomplete = () => {
         value={value}
         onChange={handleChange}
         ref={inputRef}
+        onFocus={() => toggleShowSuggestions(true)}
+        onBlur={() => toggleShowSuggestions(false)}
       />
-      <SuggestionsTable suggestions={suggestions} />
+      {showSuggestions && <SuggestionsTable suggestions={suggestions} />}
     </div>
   );
 };
