@@ -1,0 +1,23 @@
+.resultsTable {
+  border: 2px solid #000;
+  width: 85%;
+  max-width: 900px;
+  padding: 0 16px;
+  border-radius: 10px;
+}
+
+.suggestionsList {
+  list-style: none;
+  padding: 0;
+}
+
+.suggestionsList li {
+  padding: 4px;
+  font-size: 16px;
+}
+
+@media (min-width: 960px) {
+  .resultsTable {
+    width: 95%;
+  }
+}
