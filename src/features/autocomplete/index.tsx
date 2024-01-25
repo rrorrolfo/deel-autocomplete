@@ -4,7 +4,7 @@ import SuggestionsTable from "./suggestionsTable";
 
 const Autocomplete = () => {
   const [value, setValue] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setValue(e.target.value);
