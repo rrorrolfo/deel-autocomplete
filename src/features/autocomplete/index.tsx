@@ -26,12 +26,12 @@ const Autocomplete = () => {
     const debounceFetchProducts = setTimeout(async () => {
       const products: ProductType[] = await fetchProductsByName(value);
 
-      const highlightedProducts: ProductWithHiglightTitle[] = products.map(
-        (product) => ({
+      const highlightedProducts: ProductWithHiglightTitle[] = products
+        .map((product) => ({
           ...product,
           highlightTitle: getHighlightedTitle(product, value),
-        })
-      );
+        }))
+        .slice(0, 10);
 
       setSuggestions(highlightedProducts);
     }, 300);
