@@ -5,18 +5,16 @@ export const getHighlightedTitle = (
   highlight: string
 ) => {
   const { title, id } = product;
-  const suggestionParts = title.split(new RegExp(`(${highlight})`, "i"));
+  const suggestionParts = title.split(new RegExp(`(${highlight})`, "gi"));
   return (
     <>
-      {highlight.length
-        ? suggestionParts.map((part) =>
-            part.toLowerCase() === highlight.toLowerCase() ? (
-              <b key={id}>{part}</b>
-            ) : (
-              part
-            )
-          )
-        : title}
+      {suggestionParts.map((part, i) =>
+        part.toLowerCase() === highlight.toLowerCase() ? (
+          <b key={`${id}-${i + 1}`}>{part}</b>
+        ) : (
+          part
+        )
+      )}
     </>
   );
 };
