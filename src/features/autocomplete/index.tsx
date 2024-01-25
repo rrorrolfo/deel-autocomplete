@@ -1,9 +1,12 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./autocomplete.module.css";
 import SuggestionsTable from "./suggestionsTable";
+import { fetchProductsByName } from "../../api/requests";
+import { ProductType } from "../../common/types/products";
 
 const Autocomplete = () => {
   const [value, setValue] = useState("");
+  const [suggestions, setSuggestions] = useState<ProductType[]>([]);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -12,6 +15,15 @@ const Autocomplete = () => {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  useEffect(() => {
+    const debounceFetchProducts = setTimeout(async () => {
+      const products: ProductType[] = await fetchProductsByName(value);
+      setSuggestions(products);
+    }, 300);
+
+    return () => clearTimeout(debounceFetchProducts);
+  }, [value]);
 
   return (
     <div className={styles.inputContainer}>
@@ -23,7 +35,7 @@ const Autocomplete = () => {
         onChange={handleChange}
         ref={inputRef}
       />
-      <SuggestionsTable />
+      <SuggestionsTable suggestions={suggestions} />
     </div>
   );
 };
