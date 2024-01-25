@@ -1,20 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./autocomplete.module.css";
 import SuggestionsTable from "./suggestionsTable";
-import { fetchProductsByName } from "../../api/requests";
-import {
-  ProductType,
-  ProductWithHiglightTitle,
-} from "../../common/types/products";
+import { useFetchProductsByName } from "../../hooks";
 import { getHighlightedTitle } from "../../common/utils";
+import { ProductWithHiglightTitle } from "../../common/types/products";
 
 const Autocomplete = () => {
   const [value, setValue] = useState("");
-  const [suggestions, setSuggestions] = useState<ProductWithHiglightTitle[]>(
-    []
-  );
   const [showSuggestions, toggleShowSuggestions] = useState(false);
-
+  const { products } = useFetchProductsByName(value);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -24,22 +18,12 @@ const Autocomplete = () => {
     inputRef.current?.focus();
   }, []);
 
-  useEffect(() => {
-    const debounceFetchProducts = setTimeout(async () => {
-      const products: ProductType[] = await fetchProductsByName(value);
-
-      const highlightedProducts: ProductWithHiglightTitle[] = products
-        .map((product) => ({
-          ...product,
-          highlightTitle: getHighlightedTitle(product, value),
-        }))
-        .slice(0, 10);
-
-      setSuggestions(highlightedProducts);
-    }, 300);
-
-    return () => clearTimeout(debounceFetchProducts);
-  }, [value]);
+  const highlightedProducts: ProductWithHiglightTitle[] = products
+    .slice(0, 10)
+    .map((product) => ({
+      ...product,
+      highlightTitle: getHighlightedTitle(product, value),
+    }));
 
   return (
     <div className={styles.inputContainer}>
@@ -53,7 +37,9 @@ const Autocomplete = () => {
         onFocus={() => toggleShowSuggestions(true)}
         onBlur={() => toggleShowSuggestions(false)}
       />
-      {showSuggestions && <SuggestionsTable suggestions={suggestions} />}
+      {showSuggestions && (
+        <SuggestionsTable suggestions={highlightedProducts} />
+      )}
     </div>
   );
 };
