@@ -14,3 +14,7 @@ export interface ProductType {
     updatedAt: Date;
   };
 }
+
+export interface ProductWithHiglightTitle extends ProductType {
+  highlightTitle: JSX.Element;
+}
