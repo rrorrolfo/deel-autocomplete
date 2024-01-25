@@ -8,7 +8,7 @@ import { ProductWithHiglightTitle } from "../../common/types/products";
 const Autocomplete = () => {
   const [value, setValue] = useState("");
   const [showSuggestions, toggleShowSuggestions] = useState(false);
-  const { products } = useFetchProductsByName(value);
+  const { products, errorFetching } = useFetchProductsByName(value);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -37,8 +37,14 @@ const Autocomplete = () => {
         onFocus={() => toggleShowSuggestions(true)}
         onBlur={() => toggleShowSuggestions(false)}
       />
-      {showSuggestions && (
-        <SuggestionsTable suggestions={highlightedProducts} />
+      {errorFetching ? (
+        <span className={styles.errorMessage}>
+          There was an error, please search for other product name
+        </span>
+      ) : (
+        showSuggestions && (
+          <SuggestionsTable suggestions={highlightedProducts} />
+        )
       )}
     </div>
   );

@@ -11,6 +11,10 @@
   margin: auto;
 }
 
+.errorMessage {
+  color: #e82d5a;
+}
+
 @media (min-width: 960px) {
   .autocompleteInput {
     width: 95%;
