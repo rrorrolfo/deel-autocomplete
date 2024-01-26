@@ -16,16 +16,22 @@ export const useDebounce = (value: string, delay: number): string => {
 };
 
 export const useFetchProductsByName = (
-  value: string
+  productName: string
 ): { products: ProductType[]; errorFetching: boolean } => {
-  const [products, setproducts] = useState<ProductType[]>([]);
+  const [products, setProducts] = useState<ProductType[]>([]);
   const [errorFetching, toggleErrorFetching] = useState(false);
 
   useEffect(() => {
+    if (productName === "") {
+      setProducts([]);
+      toggleErrorFetching(false);
+      return;
+    }
+
     const fetchProducts = async () => {
       try {
-        const products: ProductType[] = await fetchProductsByName(value);
-        setproducts(products);
+        const products: ProductType[] = await fetchProductsByName(productName);
+        setProducts(products);
         toggleErrorFetching(false);
       } catch (e) {
         toggleErrorFetching(true);
@@ -33,7 +39,7 @@ export const useFetchProductsByName = (
     };
 
     fetchProducts();
-  }, [value]);
+  }, [productName]);
 
   return { products, errorFetching };
 };
