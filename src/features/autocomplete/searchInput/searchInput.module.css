@@ -1,0 +1,12 @@
+.autocompleteInput {
+  width: 85%;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 16px;
+}
+
+@media (min-width: 960px) {
+  .autocompleteInput {
+    width: 95%;
+  }
+}
