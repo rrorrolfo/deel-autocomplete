@@ -13,7 +13,8 @@ const SuggestionsTable = ({
   debouncedValue,
   showSuggestions,
 }: SuggestionsTableProps) => {
-  const { products, errorFetching } = useFetchProductsByName(debouncedValue);
+  const { products, errorFetching, isLoading } =
+    useFetchProductsByName(debouncedValue);
 
   const highlightedProducts: ProductWithHiglightTitle[] = useMemo(
     () =>
@@ -21,8 +22,15 @@ const SuggestionsTable = ({
         ...product,
         highlightTitle: getHighlightedTitle(product, debouncedValue),
       })),
-    [products, debouncedValue]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [products]
   );
+
+  const isEmptyDebouncedValue = debouncedValue === "";
+  const shouldDisplayLoadingText =
+    isLoading && highlightedProducts.length === 0;
+  const displaySuggestions =
+    highlightedProducts.length > 0 && !isEmptyDebouncedValue;
 
   if (errorFetching) {
     return (
@@ -32,7 +40,7 @@ const SuggestionsTable = ({
     );
   }
 
-  if (debouncedValue === "") {
+  if (isEmptyDebouncedValue) {
     return <></>;
   }
 
@@ -41,7 +49,9 @@ const SuggestionsTable = ({
       {showSuggestions && (
         <div className={styles.resultsTable}>
           <ul className={styles.suggestionsList}>
-            {highlightedProducts.length ? (
+            {shouldDisplayLoadingText ? (
+              <li>Loading...</li>
+            ) : displaySuggestions ? (
               highlightedProducts.map(({ highlightTitle, id }) => (
                 <li key={id}>{highlightTitle}</li>
               ))
