@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, ComponentProps } from "react";
 import styles from "./searchInput.module.css";
 
 type SearchInputProps = {
@@ -11,7 +11,7 @@ const SearchInput = ({
   value,
   setValue,
   toggleShowSuggestions,
-}: SearchInputProps) => {
+}: SearchInputProps & ComponentProps<"button">) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
