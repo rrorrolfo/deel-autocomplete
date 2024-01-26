@@ -2,14 +2,27 @@ import { useEffect, useState } from "react";
 import { ProductType } from "../common/types/products";
 import { fetchProductsByName } from "../api/requests";
 
-type UseFetchReturnType = { products: ProductType[]; errorFetching: boolean };
+export const useDebounce = (value: string, delay: number): string => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+  useEffect(() => {
+    const debouncedID = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
 
-export const useFetchProductsByName = (value: string): UseFetchReturnType => {
+    return () => clearTimeout(debouncedID);
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+export const useFetchProductsByName = (
+  value: string
+): { products: ProductType[]; errorFetching: boolean } => {
   const [products, setproducts] = useState<ProductType[]>([]);
   const [errorFetching, toggleErrorFetching] = useState(false);
 
   useEffect(() => {
-    const debounceFetchProducts = setTimeout(async () => {
+    const fetchProducts = async () => {
       try {
         const products: ProductType[] = await fetchProductsByName(value);
         setproducts(products);
@@ -17,9 +30,9 @@ export const useFetchProductsByName = (value: string): UseFetchReturnType => {
       } catch (e) {
         toggleErrorFetching(true);
       }
-    }, 300);
+    };
 
-    return () => clearTimeout(debounceFetchProducts);
+    fetchProducts();
   }, [value]);
 
   return { products, errorFetching };
