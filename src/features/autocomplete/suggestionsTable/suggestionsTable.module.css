@@ -18,6 +18,7 @@
 
 .errorMessage {
   color: #e82d5a;
+  display: block;
 }
 
 @media (min-width: 960px) {
