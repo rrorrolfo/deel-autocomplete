@@ -16,6 +16,10 @@
   font-size: 16px;
 }
 
+.errorMessage {
+  color: #e82d5a;
+}
+
 @media (min-width: 960px) {
   .resultsTable {
     width: 95%;
