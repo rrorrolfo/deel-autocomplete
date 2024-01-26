@@ -17,9 +17,10 @@ export const useDebounce = (value: string, delay: number): string => {
 
 export const useFetchProductsByName = (
   productName: string
-): { products: ProductType[]; errorFetching: boolean } => {
+): { products: ProductType[]; errorFetching: boolean; isLoading: boolean } => {
   const [products, setProducts] = useState<ProductType[]>([]);
   const [errorFetching, toggleErrorFetching] = useState(false);
+  const [isLoading, toggleIsLoading] = useState(false);
 
   useEffect(() => {
     if (productName === "") {
@@ -29,6 +30,8 @@ export const useFetchProductsByName = (
     }
 
     const fetchProducts = async () => {
+      toggleIsLoading(true);
+
       try {
         const products: ProductType[] = await fetchProductsByName(productName);
         setProducts(products);
@@ -36,10 +39,12 @@ export const useFetchProductsByName = (
       } catch (e) {
         toggleErrorFetching(true);
       }
+
+      toggleIsLoading(false);
     };
 
     fetchProducts();
   }, [productName]);
 
-  return { products, errorFetching };
+  return { products, errorFetching, isLoading };
 };
