@@ -7,4 +7,4 @@ This project consists of a search input where you can type the name of a product
 - Open this project in your favorite code editor
 - Open a new terminal and run the command `npm install` to install all the needed dependencies
 - Run the command `npm run dev` to start the development server
-- Open you prefered browser and go to this url: http://localhost:5173/
+- Open your preferred browser and go to this url: ["http://localhost:5173/"](http://localhost:5173/)
