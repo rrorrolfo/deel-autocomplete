@@ -1,51 +1,26 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import styles from "./autocomplete.module.css";
 import SuggestionsTable from "./suggestionsTable";
-import { useFetchProductsByName } from "../../hooks";
-import { getHighlightedTitle } from "../../common/utils";
-import { ProductWithHiglightTitle } from "../../common/types/products";
+import SearchInput from "./searchInput";
+import { useDebounce } from "../../hooks";
 
 const Autocomplete = () => {
   const [value, setValue] = useState("");
   const [showSuggestions, toggleShowSuggestions] = useState(false);
-  const { products, errorFetching } = useFetchProductsByName(value);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setValue(e.target.value);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  const highlightedProducts: ProductWithHiglightTitle[] = products
-    .slice(0, 10)
-    .map((product) => ({
-      ...product,
-      highlightTitle: getHighlightedTitle(product, value),
-    }));
+  const debouncedValue = useDebounce(value, 300);
 
   return (
     <div className={styles.inputContainer}>
-      <input
-        type="text"
-        placeholder="Search for a product"
-        className={styles.autocompleteInput}
+      <SearchInput
+        toggleShowSuggestions={toggleShowSuggestions}
         value={value}
-        onChange={handleChange}
-        ref={inputRef}
-        onFocus={() => toggleShowSuggestions(true)}
-        onBlur={() => toggleShowSuggestions(false)}
+        setValue={setValue}
       />
-      {errorFetching ? (
-        <span className={styles.errorMessage}>
-          There was an error, please search for other product name
-        </span>
-      ) : (
-        showSuggestions && (
-          <SuggestionsTable suggestions={highlightedProducts} />
-        )
-      )}
+      <SuggestionsTable
+        debouncedValue={debouncedValue}
+        showSuggestions={showSuggestions}
+      />
     </div>
   );
 };
